@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/get-cards.response.schema.json",
+  "title": "get-cards Response",
+  "type": "object",
+  "required": ["sessionId", "counts", "foreground", "orbit", "visibleCards"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "success": { "type": "boolean" },
+    "sessionId": { "type": ["string", "number"] },
+    "session_id": { "type": ["string", "number"] },
+    "counts": { "$ref": "#/$defs/counts" },
+    "summary": { "$ref": "#/$defs/counts" },
+    "foreground": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "orbit": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "dismissed": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "archived": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "visibleCards": { "type": "array", "items": { "$ref": "card.schema.json" } }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "required": ["foreground", "orbit", "dismissed", "archived", "active", "visible", "total"],
+      "properties": {
+        "foreground": { "type": "number" },
+        "orbit": { "type": "number" },
+        "dismissed": { "type": "number" },
+        "archived": { "type": "number" },
+        "active": { "type": "number" },
+        "visible": { "type": "number" },
+        "total": { "type": "number" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "success": true,
+  "sessionId": "124661",
+  "phase": "WorkspaceMode",
+  "scene": "card10",
+  "counts": {
+    "foreground": 0,
+    "orbit": 2,
+    "dismissed": 1,
+    "archived": 0,
+    "active": 2,
+    "visible": 2,
+    "total": 3
+  },
+  "foreground": [],
+  "orbit": [
+    {
+      "id": "studio-local-site-preview",
+      "card_type": "site_preview",
+      "status": "kept",
+      "bucket": "orbit"
+    },
+    {
+      "id": "studio-local-tracker",
+      "card_type": "client_tracker",
+      "status": "kept",
+      "bucket": "orbit"
+    }
+  ],
+  "dismissed": [
+    {
+      "id": "studio-local-approval",
+      "card_type": "approval",
+      "status": "dismissed",
+      "bucket": "dismissed"
+    }
+  ],
+  "archived": [],
+  "visibleCards": [
+    {
+      "id": "studio-local-site-preview",
+      "card_type": "site_preview",
+      "status": "kept",
+      "bucket": "orbit"
+    },
+    {
+      "id": "studio-local-tracker",
+      "card_type": "client_tracker",
+      "status": "kept",
+      "bucket": "orbit"
+    }
+  ],
+  "latestRuntimeReport": {
+    "sessionId": "124661",
+    "phase": "WorkspaceMode",
+    "scene": "card10",
+    "totalCardCount": 3,
+    "visibleCards": [
+      {
+        "id": "studio-local-site-preview",
+        "status": "kept",
+        "bucket": "orbit"
+      },
+      {
+        "id": "studio-local-tracker",
+        "status": "kept",
+        "bucket": "orbit"
+      }
+    ],
+    "reportedAt": "{generated-at-runtime}"
+  },
+  "reportIsStale": false,
+  "truthSource": "local_persisted_cards_plus_latest_runtime_report"
+}

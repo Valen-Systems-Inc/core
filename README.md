@@ -13,6 +13,33 @@ Fork it. Modify it. Publish your improvements. Contribute upstream.
 Interested builders and aspiring Valen Systems developers are welcome to
 experiment, sharpen the interface, and open pull requests.
 
+## Run It Locally
+
+```bash
+npm install --prefix runtime
+npm run check
+npm run proof:browser
+npm run dev
+```
+
+Open [http://localhost:9252](http://localhost:9252).
+
+The first public milestone is an extracted cinematic workspace renderer backed
+by a persistent local JSON card loop. It includes the authored card panels,
+center sculpture, Three.js layers, camera fit, motion, input handling, asset
+loading, bundler, contracts, fixtures, and browser smoke proof.
+
+No hosted account, private token, or cloud access is required.
+
+## Start Contributing
+
+Read [docs/public-boundary.md](docs/public-boundary.md), then use
+[docs/module-buckets.md](docs/module-buckets.md) to find the smallest useful
+owner for your change.
+
+The authorable `ValenGateway` hook and wrapper SDK is the next milestone. The
+current local bridge intentionally proves the extracted renderer loop first.
+
 ## License
 
 Core is source-available under the

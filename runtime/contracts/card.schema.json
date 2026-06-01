@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/card.schema.json",
+  "title": "Core Runtime Card",
+  "type": "object",
+  "required": ["id", "card_type", "status"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "sessionId": { "type": ["string", "number"] },
+    "session_id": { "type": ["string", "number"] },
+    "idempotency_key": { "type": "string" },
+    "title": { "type": "string" },
+    "type": { "type": "string" },
+    "card_type": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "minLength": 1 },
+    "bucket": { "enum": ["foreground", "orbit", "dismissed", "archived"] },
+    "priority": { "type": "number" },
+    "card_data": { "type": "object" },
+    "spatial_state": {
+      "anyOf": [
+        { "type": "object" },
+        { "type": "null" }
+      ]
+    },
+    "source": { "type": "string" },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": true
+}

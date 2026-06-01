@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/workspace-capability.schema.json",
+  "title": "Workspace Capability",
+  "type": "object",
+  "required": ["sourceWindow", "hiddenCapability"],
+  "properties": {
+    "sourceWindow": { "type": "string", "minLength": 1 },
+    "hiddenCapability": { "type": "string", "minLength": 1 },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "approvalRequired": { "type": "boolean" },
+    "card_type": { "type": "string" },
+    "nextAction": { "type": "string" }
+  },
+  "additionalProperties": true
+}

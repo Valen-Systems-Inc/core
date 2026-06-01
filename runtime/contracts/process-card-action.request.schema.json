@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/process-card-action.request.schema.json",
+  "title": "process-card-action Request",
+  "type": "object",
+  "required": ["sessionId", "cardId", "action"],
+  "properties": {
+    "sessionId": { "type": ["string", "number"] },
+    "session_id": { "type": ["string", "number"] },
+    "cardId": { "type": "string", "minLength": 1 },
+    "card_id": { "type": "string", "minLength": 1 },
+    "action": {
+      "enum": ["keep", "dismiss", "recall", "approve", "select", "change", "answer", "show_more", "archive"]
+    },
+    "verb": { "type": "string" },
+    "payload": { "type": "object" }
+  },
+  "additionalProperties": true
+}

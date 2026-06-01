@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/process-card-action.response.schema.json",
+  "title": "process-card-action Response",
+  "type": "object",
+  "required": ["sessionId", "cardId", "action", "newStatus", "newBucket"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "success": { "type": "boolean" },
+    "sessionId": { "type": ["string", "number"] },
+    "cardId": { "type": "string" },
+    "action": { "type": "string" },
+    "newStatus": { "type": "string" },
+    "newBucket": { "enum": ["foreground", "orbit", "dismissed", "archived"] },
+    "spatial_state": { "type": "object" },
+    "card": { "$ref": "card.schema.json" }
+  },
+  "additionalProperties": true
+}

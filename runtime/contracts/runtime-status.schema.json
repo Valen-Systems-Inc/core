@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/runtime-status.schema.json",
+  "title": "get-runtime-status Response",
+  "type": "object",
+  "required": ["sessionId", "counts", "foreground", "orbit", "dismissed", "archived", "visibleCards", "truthSource"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "success": { "type": "boolean" },
+    "sessionId": { "type": ["string", "number"] },
+    "phase": { "type": "string" },
+    "scene": { "type": "string" },
+    "counts": { "$ref": "get-cards.response.schema.json#/$defs/counts" },
+    "foreground": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "orbit": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "dismissed": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "archived": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "visibleCards": { "type": "array", "items": { "$ref": "card.schema.json" } },
+    "latestRuntimeReport": {
+      "anyOf": [
+        { "type": "object" },
+        { "type": "null" }
+      ]
+    },
+    "reportIsStale": { "type": "boolean" },
+    "truthSource": { "type": "string" }
+  },
+  "additionalProperties": true
+}

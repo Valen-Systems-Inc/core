@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "success": true,
+  "sessionId": "124661",
+  "session_id": "124661",
+  "counts": {
+    "foreground": 2,
+    "orbit": 1,
+    "dismissed": 0,
+    "archived": 0,
+    "active": 3,
+    "visible": 3,
+    "total": 3
+  },
+  "foreground": [
+    {
+      "id": "studio-local-site-preview",
+      "card_type": "site_preview",
+      "status": "focused",
+      "bucket": "foreground"
+    },
+    {
+      "id": "studio-local-approval",
+      "card_type": "approval",
+      "status": "focused",
+      "bucket": "foreground"
+    }
+  ],
+  "orbit": [
+    {
+      "id": "studio-local-tracker",
+      "card_type": "client_tracker",
+      "status": "kept",
+      "bucket": "orbit"
+    }
+  ],
+  "dismissed": [],
+  "archived": [],
+  "visibleCards": [
+    {
+      "id": "studio-local-site-preview",
+      "card_type": "site_preview",
+      "status": "focused",
+      "bucket": "foreground"
+    },
+    {
+      "id": "studio-local-approval",
+      "card_type": "approval",
+      "status": "focused",
+      "bucket": "foreground"
+    },
+    {
+      "id": "studio-local-tracker",
+      "card_type": "client_tracker",
+      "status": "kept",
+      "bucket": "orbit"
+    }
+  ]
+}

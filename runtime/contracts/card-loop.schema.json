@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://valen-systems.local/contracts/card-loop.schema.json",
+  "title": "Core Runtime Card Loop",
+  "type": "object",
+  "required": ["sessionId", "counts", "foreground", "orbit", "visibleCards"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "success": { "type": "boolean" },
+    "sessionId": { "type": ["string", "number"] },
+    "session_id": { "type": ["string", "number"] },
+    "counts": { "$ref": "#/$defs/counts" },
+    "summary": { "$ref": "#/$defs/counts" },
+    "foreground": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/card" }
+    },
+    "orbit": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/card" }
+    },
+    "dismissed": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/card" }
+    },
+    "archived": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/card" }
+    },
+    "visibleCards": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/card" }
+    }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "required": ["foreground", "orbit", "dismissed", "archived", "active", "visible", "total"],
+      "properties": {
+        "foreground": { "type": "number" },
+        "orbit": { "type": "number" },
+        "dismissed": { "type": "number" },
+        "archived": { "type": "number" },
+        "active": { "type": "number" },
+        "visible": { "type": "number" },
+        "total": { "type": "number" }
+      }
+    },
+    "card": {
+      "type": "object",
+      "required": ["id", "title", "card_type", "status", "card_data"],
+      "properties": {
+        "id": { "type": "string" },
+        "sessionId": { "type": ["string", "number"] },
+        "session_id": { "type": ["string", "number"] },
+        "title": { "type": "string" },
+        "type": { "type": "string" },
+        "card_type": { "type": "string" },
+        "status": { "type": "string" },
+        "bucket": { "enum": ["foreground", "orbit", "dismissed", "archived"] },
+        "priority": { "type": "number" },
+        "card_data": { "type": "object" },
+        "spatial_state": {
+          "anyOf": [
+            { "type": "object" },
+            { "type": "null" }
+          ]
+        }
+      }
+    }
+  }
+}

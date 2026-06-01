@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "success": true,
+  "sessionId": "124661",
+  "created": 3,
+  "updated": 0,
+  "source": "create-business-starter-cards",
+  "cards": [
+    {
+      "id": "studio-local-site-preview",
+      "title": "Lead site for local",
+      "card_type": "site_preview",
+      "status": "focused",
+      "bucket": "foreground",
+      "spatial_state": {
+        "space": "foreground",
+        "cluster": "growth"
+      }
+    },
+    {
+      "id": "studio-local-tracker",
+      "title": "studio lead tracker",
+      "card_type": "client_tracker",
+      "status": "kept",
+      "bucket": "orbit",
+      "spatial_state": {
+        "space": "orbit",
+        "cluster": "operations"
+      }
+    },
+    {
+      "id": "studio-local-approval",
+      "title": "Approval gate",
+      "card_type": "approval",
+      "status": "focused",
+      "bucket": "foreground",
+      "spatial_state": {
+        "space": "foreground",
+        "cluster": "approvals"
+      }
+    }
+  ]
+}

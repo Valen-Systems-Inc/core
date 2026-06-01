@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "success": true,
+  "sessionId": "124661",
+  "action": "dismiss",
+  "cardId": "studio-local-approval",
+  "newStatus": "dismissed",
+  "newBucket": "dismissed",
+  "spatial_state": {
+    "space": "dismissed",
+    "cluster": "approvals"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "success": true,
+  "sessionId": "124661",
+  "action": "keep",
+  "cardId": "studio-local-site-preview",
+  "newStatus": "kept",
+  "newBucket": "orbit",
+  "spatial_state": {
+    "space": "orbit",
+    "cluster": "growth"
+  }
+}

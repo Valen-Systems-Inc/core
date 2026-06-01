@@ -1,0 +1,10 @@
+{
+  "name": "@valen-systems/core",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix runtime run serve",
+    "check": "npm --prefix runtime run check && npm --prefix runtime run proof:bundle && node scripts/check-sensitive.mjs",
+    "proof:browser": "npm --prefix runtime run proof:browser"
+  }
+}

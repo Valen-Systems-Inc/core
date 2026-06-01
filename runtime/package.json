@@ -1,0 +1,22 @@
+{
+  "name": "@valen-systems/core-public-runtime",
+  "private": true,
+  "type": "module",
+  "description": "Extracted local Core cinematic runtime playground.",
+  "scripts": {
+    "build": "node scripts/build-runtime.mjs",
+    "build:bundle": "node scripts/build-runtime.mjs",
+    "check": "npm run build && npm run check:dist && npm run check:contracts && npm run proof:card-helpers && npm run proof:card-loop",
+    "check:contracts": "node scripts/check-contracts.mjs",
+    "check:dist": "node scripts/check-dist-sync.mjs",
+    "proof:browser": "npm run build && playwright test",
+    "proof:bundle": "node scripts/proof-runtime-bundle.mjs",
+    "proof:card-helpers": "node scripts/proof-card-helpers.mjs",
+    "proof:card-loop": "node scripts/proof-card-loop.mjs",
+    "serve": "node scripts/dev-server.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "ajv": "^8.20.0"
+  }
+}

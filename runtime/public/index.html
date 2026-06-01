@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Core by Valen Systems: Local Playground</title>
+    <meta name="description" content="Improve Core locally as a spatial interface for AI agents." />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="runtime-booting">
+    <canvas id="valen-pbr-stage" aria-hidden="true"></canvas>
+    <canvas id="valen-stage" aria-hidden="true"></canvas>
+
+    <header class="topbar" aria-label="Playground controls">
+      <a class="brand" href="#card1" aria-label="Core local playground">
+        <span class="brand-mark">C</span>
+        <span>Core</span>
+      </a>
+      <nav class="nav">
+        <a href="#card1">Local workspace</a>
+      </nav>
+      <button id="refresh-workspace" class="command ghost" type="button">Refresh</button>
+      <button id="reset-workspace" class="command ghost" type="button">Reset fixtures</button>
+      <button id="audio-toggle" class="icon-button" type="button" aria-pressed="false" aria-label="Toggle audio">
+        <span class="icon-sound"></span>
+      </button>
+    </header>
+
+    <main class="experience" aria-live="polite">
+      <section id="card1" class="chapter hero-chapter" data-scene="0">
+        <div class="chapter-copy hero-copy">
+          <p class="kicker">LOCAL CORE PLAYGROUND</p>
+          <h1>Work should orbit the decision.</h1>
+          <p>
+            Improve the extracted cinematic runtime against local fixtures. Add useful local objects,
+            test the panel layouts, and keep the dashboard out of it.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <aside class="diagnostics" aria-label="Local runtime status">
+      <div><span>Mode</span><strong>WorkspaceMode</strong></div>
+      <div><span>Persistence</span><strong>Local JSON</strong></div>
+      <div><span>Backend</span><strong>None required</strong></div>
+    </aside>
+
+    <noscript><p class="noscript">Core needs JavaScript to run the cinematic runtime.</p></noscript>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./dist/runtime.js"></script>
+  </body>
+</html>
