@@ -8,10 +8,22 @@ software that feels less like a dashboard and more like a living workspace.
 
 ## Build With Us
 
-Fork it. Modify it. Publish your improvements. Contribute upstream.
+Fork it. Modify it. Publish your improvements or don't. Contribute upstream
+if you want to.
 
 Interested builders and aspiring Valen Systems developers are welcome to
 experiment, sharpen the interface, and open pull requests.
+
+All issues in repo are directly correlated to actual production issues,
+so the pathway is clear:
+
+fix issues here in PRs - if they got merged here, they likely got merged 
+to the private repo.
+
+Once thats happened a few times, feel free to reach out to @willrob-valensdad
+on any platforms if you are interested in access to the private/proprietary 
+repositories and being a part of the overall growth of Core and of Valen Systems Inc 
+as a whole.
 
 ## Run It Locally
 
