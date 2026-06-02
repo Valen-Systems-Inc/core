@@ -1,0 +1,43 @@
+name: First contribution
+description: Use this when you want to make a first safe public Core change.
+title: "[first contribution]: "
+labels: ["good first issue", "help wanted"]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What do you want to improve?
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Runtime owner
+      options:
+        - Card panels
+        - Motion / camera / render loop
+        - Input / interaction
+        - Assets / Three.js
+        - Local workspace / card loop
+        - Docs / contribution flow
+        - Not sure yet
+    validations:
+      required: true
+  - type: textarea
+    id: proof
+    attributes:
+      label: Proof plan
+      description: Which local command or browser proof will show it works?
+      placeholder: npm run check
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Public boundary
+      options:
+        - label: This does not need private hosted services, tokens, or workspace IDs.
+          required: true
+        - label: This does not add payment, domain, email, ad, or customer-data wiring.
+          required: true

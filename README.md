@@ -33,11 +33,14 @@ No hosted account, private token, or cloud access is required.
 
 ## Start Contributing
 
-Read [docs/public-boundary.md](docs/public-boundary.md), then use
-[docs/module-buckets.md](docs/module-buckets.md) to find the smallest useful
-owner for your change. Follow
+Start with [docs/getting-started.md](docs/getting-started.md). Then use
+[docs/README.md](docs/README.md) to find the smallest public doc for your task.
+
+For runtime work, use [docs/module-buckets.md](docs/module-buckets.md) to find
+the smallest useful owner for your change. Follow
 [docs/runtime-call-order.md](docs/runtime-call-order.md) when you need the
-larger runtime graph.
+larger runtime graph. Read [docs/public-boundary.md](docs/public-boundary.md)
+before proposing anything that touches hosted behavior.
 
 The authorable `ValenGateway` hook and wrapper SDK is the next milestone. The
 current local bridge intentionally proves the extracted renderer loop first.

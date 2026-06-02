@@ -11,6 +11,8 @@ npm run proof:browser
 npm run dev
 ```
 
+For a guided first change, read [docs/getting-started.md](docs/getting-started.md).
+
 ## Good First Contributions
 
 - Improve responsive card layout and copy fit.
@@ -20,3 +22,17 @@ npm run dev
 
 Keep pull requests narrow. Include the local command you ran and the browser
 proof that demonstrates the visible result.
+
+## Pull Request Rule
+
+Every PR should say:
+
+- what changed
+- which runtime module bucket owns it
+- which proof command passed
+- whether browser proof is needed
+- why it stays inside the public boundary
+
+Do not include production tokens, private workspace identifiers, hosted proxy
+configuration, payment wiring, customer data, or private Valen Systems business
+logic.

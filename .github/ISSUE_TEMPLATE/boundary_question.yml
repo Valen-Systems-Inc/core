@@ -1,0 +1,28 @@
+name: Public boundary question
+description: Ask whether an idea belongs in public Core or private Valen Systems infrastructure.
+title: "[boundary]: "
+labels: ["question", "lane: docs"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: What are you trying to build or expose?
+    validations:
+      required: true
+  - type: checkboxes
+    id: risk
+    attributes:
+      label: Does it touch any of these?
+      options:
+        - label: Hosted backend behavior
+        - label: Production tokens or credentials
+        - label: Workspace identifiers
+        - label: Payment, domain, email, ad, or customer-data behavior
+        - label: Private Valen Systems business logic
+        - label: None of these
+  - type: textarea
+    id: local_alternative
+    attributes:
+      label: Local alternative
+      description: Can this be demonstrated locally without private infrastructure?

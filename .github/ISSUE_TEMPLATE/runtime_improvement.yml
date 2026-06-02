@@ -1,0 +1,46 @@
+name: Runtime improvement
+description: Improve the local Core runtime, renderer, cards, motion, input, assets, or proof.
+title: "[runtime]: "
+labels: ["enhancement", "lane: renderer"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What feels wrong, unclear, slow, broken, or visually off?
+    validations:
+      required: true
+  - type: dropdown
+    id: module_bucket
+    attributes:
+      label: Module bucket
+      options:
+        - "01 Local host entry, boot, and state"
+        - "02 Neutral scene composition"
+        - "03 Asset loading and Three.js setup"
+        - "04 Sculpture, effects, audio, and boot signal"
+        - "05 Card panels"
+        - "06 Input and interaction"
+        - "07 Motion, camera, scroll, and render loop"
+        - "08 Local workspace"
+        - "09 Local ValenGateway bridge and contracts"
+        - Not sure yet
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What should happen after the change?
+    validations:
+      required: true
+  - type: textarea
+    id: proof
+    attributes:
+      label: Proof
+      description: Which local commands, screenshots, or browser proof should close this?
+      placeholder: |
+        npm run check
+        npm run proof:browser
+    validations:
+      required: true
