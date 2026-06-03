@@ -30,11 +30,15 @@ as a whole.
 ```bash
 npm install --prefix runtime
 npm run check
+npm run setup:browser
 npm run proof:browser
 npm run dev
 ```
 
 Open [http://localhost:9252](http://localhost:9252).
+
+`npm run setup:browser` is a one-time Playwright browser download for local
+browser proof. You only need it before `npm run proof:browser`.
 
 The first public milestone is an extracted cinematic workspace renderer backed
 by a persistent local JSON card loop. It includes the authored card panels,

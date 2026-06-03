@@ -36,8 +36,12 @@ runtime build
 For browser proof:
 
 ```bash
+npm run setup:browser
 npm run proof:browser
 ```
+
+`npm run setup:browser` is a one-time Chromium download for Playwright. Run it
+before the first browser proof on a new machine.
 
 For the local dev server:
 
