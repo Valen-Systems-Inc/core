@@ -1,0 +1,22 @@
+name: Core Public Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  repo-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install runtime dependencies
+        run: npm install --prefix runtime
+      - name: Run public checks
+        run: npm run check
+      - name: Check whitespace
+        run: git diff --check
