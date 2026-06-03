@@ -1,6 +1,7 @@
 /**
- * Cinematic agent-desk script for the public Core playground.
- * No external APIs — proves ValenGateway-shaped hooks + spatial cards in motion.
+ * Scripted state machine for localhost ValenGateway hook smoke tests.
+ * Upserts JSON work-object records in the local card harness only —
+ * not wired to the 3D runtime and not human-in-the-loop.
  */
 
 export const LIVE_AGENT_DESK_VERSION = "1.0.0";
@@ -40,9 +41,9 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
           spatial_state: { space: "foreground", cluster: "agent-desk" },
           card_data: {
             title: "Agent desk online",
-            body: `${company} gateway attached to Core. Milestone 2 preview running locally.`,
-            next_action: "Watch",
-            meta: "VALENGATEWAY · LIVE"
+            body: `${company} · localhost hook session started (scripted smoke test).`,
+            next_action: "Observe",
+            meta: "SCRIPTED · LOCAL HARNESS ONLY"
           }
         }
       ],
@@ -52,7 +53,7 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
         agentDeskActive: true,
         agentPhase: "boot",
         sculpturePulse: 0.35,
-        message: "Gateway connected. Spatial loop armed."
+        message: "start-live-agent-desk returned; first tick queued."
       }
     },
     {
@@ -66,7 +67,7 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
           spatial_state: { space: "orbit", cluster: "agent-desk" },
           card_data: {
             title: "Agent desk online",
-            body: "Session scoped. Reading local card topology…",
+            body: "Prior foreground record moved to orbit (scripted upsert).",
             next_action: "Orbit"
           }
         },
@@ -79,7 +80,7 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
           spatial_state: { space: "foreground", cluster: "agent-desk" },
           card_data: {
             title: "Scanning workspace",
-            body: "Mapping foreground slots (card13–16), orbit capacity, and hook latency.",
+            body: "Harness reads foreground vs orbit buckets from local JSON — not the WebGL renderer.",
             next_action: "Observe",
             metrics: { hooks_ms: 4, cards_visible: 2 }
           }
@@ -88,7 +89,7 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
       report: {
         agentPhase: "thinking",
         sculpturePulse: 0.55,
-        message: "Analyzing spatial layout…"
+        message: "tick-live-agent-desk upserted foreground + orbit records."
       }
     },
     {
@@ -111,15 +112,15 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
           card_data: {
             title: "Running: manage_valen_hooks",
             body: [
-              `Operator ${name} queued capability work.`,
-              "Register tool wrapper → bodyMapping → queue-and-poll.",
-              "Bridge: localhost hooks only (no hosted token)."
+              `Operator ${name} · scripted capability step.`,
+              "Lists local hook names — not a hosted gateway.",
+              "No external API calls in this repository path."
             ].join("\n"),
             next_action: "Stream",
             stream: [
-              "▸ register_hook(agent_desk)",
-              "▸ map_tool(run_local_capability)",
-              "▸ poll_card_loop()"
+              "▸ list_hooks(manage-valen-hooks)",
+              "▸ upsert_cards(local JSON store)",
+              "▸ return get-cards buckets"
             ]
           }
         }
@@ -127,13 +128,13 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
       report: {
         agentPhase: "acting",
         sculpturePulse: 0.82,
-        message: "Executing capability on local gateway…"
+        message: "Scripted capability step; cards still harness-only."
       }
     },
     {
-      label: "awaiting_approval",
-      agentPhase: "waiting_approval",
-      sculpturePulse: 0.65,
+      label: "approval_fixture",
+      agentPhase: "fixture",
+      sculpturePulse: 0.5,
       cards: [
         {
           id: "agent-desk-task",
@@ -141,24 +142,29 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
           spatial_state: { space: "orbit", cluster: "agent-desk" }
         },
         {
-          id: "agent-desk-approve",
+          id: "agent-desk-approve-fixture",
           card_type: "approval",
           status: "focused",
           priority: 98,
-          title: "Approve gateway publish?",
+          title: "Example approval card (fixture)",
           spatial_state: { space: "foreground", cluster: "agent-desk" },
           card_data: {
-            title: "Approve gateway publish?",
-            body: `${builder} proposes upstreaming Live Agent Desk as ValenGateway proof. Keep proprietary engines outside the public repo.`,
-            next_action: "Approve",
-            actions: ["Approve", "Keep orbiting", "Dismiss"]
+            title: "Example approval card (fixture)",
+            body: [
+              "Shows approval card_type + actions shape in JSON.",
+              "No button handler — next tick auto-advances (smoke test only).",
+              "Production M2 would block here for a human Approve click."
+            ].join("\n"),
+            next_action: "Fixture only",
+            actions: ["Approve", "Keep orbiting", "Dismiss"],
+            fixture: true
           }
         }
       ],
       report: {
-        agentPhase: "waiting_approval",
-        sculpturePulse: 0.65,
-        message: "Waiting for human approval on card surface…"
+        agentPhase: "fixture",
+        sculpturePulse: 0.5,
+        message: "Approval-shaped fixture on foreground — not human-in-the-loop."
       }
     },
     {
@@ -167,13 +173,13 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
       sculpturePulse: 0.4,
       cards: [
         {
-          id: "agent-desk-approve",
-          status: "approved",
+          id: "agent-desk-approve-fixture",
+          status: "kept",
           spatial_state: { space: "orbit", cluster: "agent-desk" },
           card_data: {
-            title: "Approved",
-            body: "Gateway path verified. Cards orbit; sculpture returns to idle breathe.",
-            approval_state: "approved"
+            title: "Example approval card (fixture)",
+            body: "Orbited by scripted tick — status kept, not user-approved.",
+            fixture: true
           }
         },
         {
@@ -181,26 +187,26 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
           card_type: "work_object",
           status: "focused",
           priority: 88,
-          title: "Desk run complete",
+          title: "Desk smoke test complete",
           spatial_state: { space: "foreground", cluster: "agent-desk" },
           card_data: {
-            title: "Desk run complete",
+            title: "Desk smoke test complete",
             body: [
               "✓ Hooks: start-live-agent-desk, tick-live-agent-desk",
-              "✓ Cards: create → orbit → approve",
-              "✓ Spatial UI reacted frame-to-frame",
+              "✓ Local JSON card records: foreground ↔ orbit upserts",
+              "✗ Not connected to 3D runtime panels",
+              "✗ No human approval flow in this preview",
               "",
-              `${name} — ${builder} shipped Milestone 2 preview on public Core.`,
-              `Gateway orchestration verified locally.`
+              `${builder} — scripted localhost harness only.`
             ].join("\n"),
-            next_action: `Call ${builder}`
+            next_action: "Review PR scope"
           }
         }
       ],
       report: {
         agentPhase: "complete",
         sculpturePulse: 0.4,
-        message: "Live Agent Desk finished. Ready for upstream PR."
+        message: "Script finished. done=true on next poll."
       }
     }
   ];
@@ -231,6 +237,8 @@ export function liveAgentDeskStep(state = {}, profile = {}) {
       step: step + 1,
       stepsTotal: steps.length,
       label: current.label,
+      scripted: true,
+      humanInTheLoop: false,
       message: current.report.message
     },
     done: false,

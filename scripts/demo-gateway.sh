@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Live Agent Desk gateway proof — M2 preview (DOM, no WebGL boot).
+# Local ValenGateway hook smoke test (scripted JSON harness — not production M2).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT/runtime"
@@ -7,10 +7,11 @@ npm install
 npm run proof:agent-desk
 echo ""
 echo "============================================================"
-echo " Live Agent Desk — gateway proof (Milestone 2 preview)"
+echo " Live Agent Desk — LOCAL HOOK SMOKE TEST (honest scope)"
 echo "============================================================"
 echo " Open: http://localhost:${PORT:-9252}/gateway-proof.html"
-echo " Watch the RIGHT panel: cards move with no clicks (~8s)."
+echo " Click 'Run smoke test' — UI shows JSON from hooks, not 3D cards."
+echo " Scripted ticks auto-advance. No human approval in this preview."
 echo "============================================================"
 PORT="${PORT:-9252}"
 if lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then

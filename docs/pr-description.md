@@ -1,19 +1,28 @@
 ## Summary
 
-Early **Milestone 2 preview**: local ValenGateway-shaped hooks that drive **foreground ↔ orbit** card choreography without manual clicks.
+**Local ValenGateway hook smoke test** — scripted `start` / `tick` loop, JSON card upserts in the local harness, and an honest DOM page that displays hook responses. **Not** production Milestone 2, **not** human-in-the-loop, **not** 3D runtime wiring.
 
-This PR stays inside the public Core boundary — scripted local harness, proof script, and a standalone DOM proof page (no WebGL boot required).
+## What this PR proves
+
+- Hook URL shape: `/api/hooks/execute/{spaceId}/{hook}`
+- Local harness can upsert work-object records and return `foreground` / `orbit` buckets
+- `npm --prefix runtime run proof:agent-desk` passes (scripted ticks until `done`)
+
+## What this PR does not claim
+
+- ❌ Humans approving on cards (approval step is a **fixture**; ticks auto-advance)
+- ❌ 3D GLB panels moving (gateway-proof shows **JSON records** only)
+- ❌ Hosted gateway or production agent runtime
+- ❌ “M2 ships” — this is a **contributor sketch** for upstream review
 
 ## Hooks
 
 | Hook | Role |
 |------|------|
-| `start-live-agent-desk` | Begin a scripted agent-desk session |
-| `tick-live-agent-desk` | Advance the run and upsert cards |
-| `get-live-agent-desk-status` | Read desk + runtime truth |
-| `stop-live-agent-desk` | Stop the run |
-
-Same URL shape as production: `/api/hooks/execute/{spaceId}/{hook}`
+| `start-live-agent-desk` | Start scripted session |
+| `tick-live-agent-desk` | Advance script; return card buckets |
+| `get-live-agent-desk-status` | Read desk state |
+| `stop-live-agent-desk` | Stop run |
 
 ## How to try it
 
@@ -24,20 +33,14 @@ npm --prefix runtime run proof:agent-desk
 npm run demo:gateway
 ```
 
-Open http://localhost:9252/gateway-proof.html — left panel explains steps; right panel shows cards moving with no clicks (~8s).
+Open http://localhost:9252/gateway-proof.html → click **Run smoke test**. Right panel shows harness JSON, not WebGL cards.
 
 ## Test plan
 
 - [x] `npm run check`
 - [x] `npm --prefix runtime run proof:agent-desk`
-- [x] Manual: `npm run demo:gateway` → open `/gateway-proof.html`, confirm scripted motion
+- [x] Manual: `npm run demo:gateway` → `/gateway-proof.html` → run completes; approval step labeled fixture; no fake animation without server
 
-## Scope
+## Context
 
-**In:** local harness hooks, scripted desk steps, `proof:agent-desk`, `gateway-proof.html`, docs.
-
-**Out:** hosted backend, private product logic, external inference engines.
-
-## Context (M1 → M2)
-
-Public Core today is a strong **manual spatial UI** (M1). This preview shows how an **agent runtime** could call gateway hooks and let cards move themselves (M2 direction) using the existing local hook loop.
+Public Core (M1) is a manual spatial UI with real 3D cards. A future M2 would let agents call a gateway **and** keep humans on approval surfaces. This PR only sketches the **localhost hook + JSON card loop** piece — labeled honestly in docs and UI.

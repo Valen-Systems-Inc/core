@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ValenGateway Proof — Live Agent Desk</title>
+    <title>ValenGateway — local hook smoke test</title>
     <style>
       :root {
         --bg: #07080c;
@@ -12,7 +12,9 @@
         --muted: #9a9588;
         --accent: #5ee9c7;
         --accent-dim: rgba(94, 233, 199, 0.2);
-        --warm: #e8c66a;
+        --warn: #e8c66a;
+        --warn-bg: rgba(232, 198, 106, 0.1);
+        --err: #f08080;
         --ok: #5ee9c7;
         --line: rgba(255, 255, 255, 0.08);
         --font: "SF Pro Text", "Segoe UI", system-ui, sans-serif;
@@ -32,6 +34,24 @@
         margin: 0 auto;
         padding: 28px 20px 48px;
       }
+      .disclaimer {
+        margin-bottom: 22px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(232, 198, 106, 0.45);
+        background: var(--warn-bg);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        color: var(--ink);
+      }
+      .disclaimer strong {
+        color: var(--warn);
+      }
+      .disclaimer ul {
+        margin: 10px 0 0;
+        padding-left: 1.2rem;
+        color: var(--muted);
+      }
       header {
         display: flex;
         flex-wrap: wrap;
@@ -48,34 +68,29 @@
       }
       h1 {
         margin: 6px 0 0;
-        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-size: clamp(1.35rem, 4vw, 1.85rem);
         font-weight: 600;
         letter-spacing: -0.02em;
       }
-      .live-pill {
+      .status-pill {
         display: inline-flex;
         align-items: center;
         gap: 8px;
         padding: 8px 14px;
         border-radius: 999px;
-        border: 1px solid var(--accent-dim);
-        background: rgba(94, 233, 199, 0.08);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
         font-size: 0.8rem;
         font-weight: 600;
+        color: var(--muted);
       }
-      .live-pill::before {
-        content: "";
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--accent);
-        animation: pulse 1.2s ease-in-out infinite;
+      .status-pill.is-running {
+        border-color: var(--accent-dim);
+        color: var(--accent);
       }
-      @keyframes pulse {
-        50% {
-          opacity: 0.35;
-          transform: scale(0.85);
-        }
+      .status-pill.is-error {
+        border-color: rgba(240, 128, 128, 0.4);
+        color: var(--err);
       }
       .grid {
         display: grid;
@@ -114,16 +129,12 @@
         padding: 14px 0;
         border-bottom: 1px solid var(--line);
         opacity: 0.35;
-        transform: translateY(6px);
-        transition: opacity 0.4s ease, transform 0.4s ease;
       }
       .step.is-active {
         opacity: 1;
-        transform: none;
       }
       .step.is-done {
-        opacity: 0.85;
-        transform: none;
+        opacity: 0.8;
       }
       .step-icon {
         width: 28px;
@@ -153,15 +164,28 @@
         margin-bottom: 4px;
       }
       .step-body {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         color: var(--muted);
         line-height: 1.45;
+      }
+      .step-note {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.78rem;
+        color: var(--warn);
       }
       .workspace {
         display: flex;
         flex-direction: column;
         gap: 16px;
         height: 100%;
+      }
+      .panel-badge {
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--warn);
+        margin: -8px 0 12px;
       }
       .orbit-lane {
         display: flex;
@@ -182,13 +206,10 @@
         border: 1px solid var(--line);
         background: rgba(255, 255, 255, 0.03);
         font-size: 0.78rem;
-        opacity: 0;
-        transform: scale(0.9);
-        transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.3s;
       }
-      .chip.is-in {
-        opacity: 1;
-        transform: scale(1);
+      .chip.is-fixture {
+        border-color: rgba(232, 198, 106, 0.35);
+        color: var(--warn);
       }
       .foreground-card {
         flex: 1;
@@ -201,48 +222,47 @@
         background: rgba(94, 233, 199, 0.04);
         text-align: center;
         padding: 24px;
-        transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
       }
       .foreground-card.is-active {
         border-color: var(--accent);
-        box-shadow: 0 0 40px rgba(94, 233, 199, 0.2);
-        transform: scale(1.02);
+        box-shadow: 0 0 32px rgba(94, 233, 199, 0.15);
+      }
+      .foreground-card.is-fixture {
+        border-color: rgba(232, 198, 106, 0.45);
+        background: var(--warn-bg);
       }
       .foreground-card .title {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 8px;
       }
       .foreground-card .sub {
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         color: var(--muted);
+        white-space: pre-line;
+        line-height: 1.45;
       }
       .hook-line {
         margin-top: auto;
         padding-top: 12px;
         font-family: ui-monospace, monospace;
         font-size: 0.72rem;
-        color: var(--warm);
+        color: var(--warn);
         word-break: break-all;
       }
       .cta {
         margin-top: 24px;
-        padding: 20px;
+        padding: 18px;
         border-radius: 14px;
-        border: 1px solid rgba(232, 198, 106, 0.35);
-        background: rgba(232, 198, 106, 0.08);
-        text-align: center;
-        opacity: 0;
-        transition: opacity 0.5s;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.02);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--muted);
       }
       .cta.is-visible {
-        opacity: 1;
-      }
-      .cta strong {
-        display: block;
-        font-size: 1.1rem;
-        margin-bottom: 6px;
-        color: var(--warm);
+        border-color: var(--accent-dim);
+        color: var(--ink);
       }
       .actions {
         margin-top: 20px;
@@ -260,200 +280,117 @@
         color: var(--accent);
         font-weight: 600;
       }
-      button:hover {
-        background: rgba(94, 233, 199, 0.22);
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
       }
       button.secondary {
         background: transparent;
         color: var(--muted);
         border-color: var(--line);
       }
-      .story {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 22px;
-      }
-      @media (max-width: 700px) {
-        .story {
-          grid-template-columns: 1fr;
-        }
-      }
-      .story-card {
-        padding: 16px 18px;
-        border-radius: 12px;
-        border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.02);
-      }
-      .story-card.before {
-        border-color: rgba(255, 255, 255, 0.1);
-      }
-      .story-card.after {
-        border-color: var(--accent-dim);
-        background: rgba(94, 233, 199, 0.06);
-      }
-      .story-card h3 {
-        margin: 0 0 8px;
-        font-size: 0.68rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-      .story-card.after h3 {
-        color: var(--accent);
-      }
-      .story-card p {
-        margin: 0;
-        font-size: 0.92rem;
-        line-height: 1.5;
-        color: var(--muted);
-      }
-      .story-card.after p {
-        color: var(--ink);
-      }
-      .recognize {
-        margin-bottom: 22px;
-        padding: 14px 18px;
-        border-radius: 12px;
-        border: 1px dashed var(--line);
-        font-size: 0.88rem;
-        color: var(--muted);
-        line-height: 1.55;
-      }
-      .recognize strong {
-        color: var(--ink);
-      }
-      .step-improvement {
-        display: block;
-        margin-top: 6px;
-        font-size: 0.8rem;
-        color: var(--accent);
-      }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <header>
-        <div>
-          <div class="brand">Valen Systems · Milestone 2 preview</div>
-          <h1>Agents can drive the spatial workspace now</h1>
-          <p style="margin: 8px 0 0; color: var(--muted); font-size: 0.95rem; max-width: 52ch">
-            Milestone 2 preview — <strong style="color: var(--ink)">ValenGateway</strong> hooks move work
-            objects without a human clicking cards.
-          </p>
-        </div>
-        <div class="live-pill" id="live-pill">M2 PREVIEW</div>
-      </header>
-
-      <div class="story">
-        <div class="story-card before">
-          <h3>Milestone 1 (public Core today)</h3>
-          <p>
-            Beautiful spatial UI + local cards — but only <strong>you</strong> click Keep, Dismiss,
-            Approve. No standard way for an AI agent to orchestrate foreground vs orbit.
-          </p>
-        </div>
-        <div class="story-card after">
-          <h3>Milestone 2 (this demo)</h3>
-          <p>
-            An <strong>agent runtime</strong> calls gateway hooks (<code style="color: var(--accent)">start-live-agent-desk</code>,
-            <code style="color: var(--accent)">tick-live-agent-desk</code>) and the <strong>cards move themselves</strong>
-            — same idea as production URLs, running on localhost.
-          </p>
-        </div>
+      <div class="disclaimer">
+        <strong>Honest scope.</strong> This page is a <em>localhost hook smoke test</em>, not production Milestone 2.
+        <ul>
+          <li>Every step is <strong>scripted</strong> — <code>tick-live-agent-desk</code> auto-advances; nothing waits for you.</li>
+          <li>Panels below show <strong>JSON work-object records</strong> returned by the harness — not the 3D GLB cards in main Core.</li>
+          <li><strong>No human approval</strong> — the approval step is a fixture showing card shape only.</li>
+          <li>Requires <code>npm run demo:gateway</code> — opening this file directly will fail.</li>
+        </ul>
       </div>
 
-      <p class="recognize">
-        <strong>What to watch:</strong> the right panel — nobody clicks.
-        The active decision stays in <strong>foreground</strong>; finished work slides to <strong>orbit</strong>.
-        That is Core’s product model, now driven by hooks instead of manual play. Bottom line: chat bots log text;
-        Valen moves <em>work objects in space</em>. This proves the orchestration layer for M2.
-      </p>
+      <header>
+        <div>
+          <div class="brand">Valen Systems · contributor smoke test</div>
+          <h1>Local ValenGateway hook loop</h1>
+          <p style="margin: 8px 0 0; color: var(--muted); font-size: 0.95rem; max-width: 56ch">
+            Exercises <code style="color: var(--accent)">/api/hooks/execute/local-core/…</code> and displays
+            foreground/orbit records from the response — same buckets real Core uses, local JSON only.
+          </p>
+        </div>
+        <div class="status-pill" id="status-pill">IDLE</div>
+      </header>
 
       <div class="grid">
         <section class="panel">
-          <h2>What the agent did (plain English)</h2>
+          <h2>Script steps (from harness label)</h2>
           <ol class="steps" id="steps"></ol>
         </section>
 
         <section class="panel">
-          <h2>Spatial workspace (foreground vs orbit)</h2>
+          <h2>Harness card records (not 3D UI)</h2>
+          <p class="panel-badge">Data from hook JSON · illustrative layout</p>
           <div class="workspace">
             <div class="orbit-lane">
-              <span class="orbit-lane-label">Orbit — background context</span>
+              <span class="orbit-lane-label">Orbit — kept records</span>
               <div id="orbit-chips"></div>
             </div>
             <div class="foreground-card" id="foreground-card">
               <div>
-                <div class="title" id="fg-title">Waiting…</div>
-                <div class="sub" id="fg-sub">Work object in focus lands here.</div>
+                <div class="title" id="fg-title">—</div>
+                <div class="sub" id="fg-sub">Start the dev server, then Run smoke test.</div>
               </div>
             </div>
-            <div class="hook-line" id="hook-line">POST /api/hooks/execute/local-core/…</div>
+            <div class="hook-line" id="hook-line">Waiting for server…</div>
           </div>
         </section>
       </div>
 
       <div class="cta" id="cta">
-        <strong>Improvement in one line: AI agents can orchestrate Valen’s spatial cards via ValenGateway.</strong>
-        M2 preview: agents orchestrate spatial cards via ValenGateway hooks on localhost.
+        This PR proposes hook names + a local harness pattern. Production M2 still needs hosted gateway, runtime
+        wiring, and real human-in-the-loop on approval cards.
       </div>
 
       <div class="actions">
-        <button type="button" id="run-btn">Run proof again</button>
-        <button type="button" class="secondary" id="github-btn">View repo</button>
+        <button type="button" id="run-btn">Run smoke test</button>
+        <button type="button" class="secondary" id="github-btn">View upstream repo</button>
       </div>
     </div>
 
     <script>
       (function () {
         const HOOK = "/api/hooks/execute/local-core/";
-        const STEP_MS = 1600;
 
-        const SCRIPT = [
+        const STEP_COPY = [
           {
-            title: "Agent attaches (not a human)",
-            body: "Gateway session starts via hook — no dashboard login, no manual Refresh.",
-            improvement: "M1: you open Core. M2: agent calls start-live-agent-desk.",
-            hook: "start-live-agent-desk",
-            foreground: { title: "Agent desk online", sub: "Hook armed · session scoped" },
-            orbit: []
+            label: "agent_online",
+            title: "Desk session starts",
+            body: "POST start-live-agent-desk; harness creates session + first upsert.",
+            note: "Scripted — not a human opening Core."
           },
           {
-            title: "Agent reads spatial layout",
-            body: "Inspects which work objects are foreground (decision now) vs orbit (context).",
-            improvement: "Problem solved: agent sees the same buckets your UI uses.",
-            hook: "tick-live-agent-desk",
-            foreground: { title: "Scanning workspace", sub: "foreground vs orbit" },
-            orbit: ["Agent desk online"]
+            label: "scanning_workspace",
+            title: "Foreground ↔ orbit upsert",
+            body: "Prior record moves to orbit; new record focused — proves bucket shape.",
+            note: "JSON store only; WebGL panels unchanged."
           },
           {
-            title: "Agent runs a capability",
-            body: "manage_valen_hooks — register tools, map payloads, poll card loop (your M2 roadmap).",
-            improvement: "This is the programmable layer chat UIs do not have.",
-            hook: "tick-live-agent-desk",
-            foreground: { title: "manage_valen_hooks", sub: "Executing on gateway…" },
-            orbit: ["Agent desk online", "Scanning workspace"]
+            label: "running_capability",
+            title: "Capability step (local list)",
+            body: "Script mentions manage_valen_hooks; lists hook names from harness.",
+            note: "No external API."
           },
           {
-            title: "Human approves on the card",
-            body: "Approval stays on the spatial surface — agent proposes, human confirms.",
-            improvement: "Core stays human-in-the-loop; agent does not bypass the card.",
-            hook: "tick-live-agent-desk",
-            foreground: { title: "Approve publish?", sub: "Decision on card, not in a log" },
-            orbit: ["manage_valen_hooks"]
+            label: "approval_fixture",
+            title: "Approval card fixture",
+            body: "Shows approval card_type + actions in JSON. Next tick auto-advances.",
+            note: "Not human-in-the-loop — fixture only."
           },
           {
-            title: "Run complete",
-            body: "Work objects moved across the run; hooks proved on localhost.",
-            improvement: "M2 orchestration works locally — ready for upstream review.",
-            hook: "tick-live-agent-desk",
-            foreground: { title: "Desk complete", sub: "Gateway proof finished" },
-            orbit: ["Approved", "manage_valen_hooks"]
+            label: "complete",
+            title: "Script done",
+            body: "done=true; summary record on foreground. Smoke test finished.",
+            note: "Check npm run proof:agent-desk for CI-style run."
           }
         ];
 
-        let sessionId = localStorage.getItem("valen_gateway_proof_session") || String(100000 + (Math.random() * 899999) | 0);
+        let sessionId =
+          localStorage.getItem("valen_gateway_proof_session") ||
+          String(100000 + ((Math.random() * 899999) | 0));
         localStorage.setItem("valen_gateway_proof_session", sessionId);
 
         const stepsEl = document.getElementById("steps");
@@ -463,11 +400,14 @@
         const fgSub = document.getElementById("fg-sub");
         const hookLine = document.getElementById("hook-line");
         const cta = document.getElementById("cta");
+        const statusPill = document.getElementById("status-pill");
+        const runBtn = document.getElementById("run-btn");
 
-        SCRIPT.forEach((s, i) => {
+        STEP_COPY.forEach((s, i) => {
           const li = document.createElement("li");
           li.className = "step";
           li.id = "step-" + i;
+          li.dataset.label = s.label;
           li.innerHTML =
             '<div class="step-icon">' +
             (i + 1) +
@@ -475,20 +415,75 @@
             s.title +
             '</div><div class="step-body">' +
             s.body +
-            (s.improvement
-              ? '<span class="step-improvement">↑ ' + s.improvement + "</span>"
-              : "") +
-            "</div></div>";
+            '<span class="step-note">' +
+            s.note +
+            "</span></div></div>";
           stepsEl.appendChild(li);
         });
 
-        function sleep(ms) {
-          return new Promise((r) => setTimeout(r, ms));
+        function cardTitle(card) {
+          if (!card) return "—";
+          const data = card.card_data || {};
+          return String(card.title || data.title || card.id || "—");
         }
 
-        function callHook(name) {
+        function cardBody(card) {
+          if (!card) return "";
+          const data = card.card_data || {};
+          return String(data.body || card.body || "").trim();
+        }
+
+        function isFixture(card) {
+          const data = card?.card_data || {};
+          return Boolean(data.fixture) || String(card?.id || "").includes("fixture");
+        }
+
+        function renderHarnessCards(body) {
+          const foreground = Array.isArray(body?.foreground) ? body.foreground : [];
+          const orbit = Array.isArray(body?.orbit) ? body.orbit : [];
+
+          orbitEl.innerHTML = "";
+          if (!orbit.length) {
+            const empty = document.createElement("span");
+            empty.className = "chip";
+            empty.textContent = "(no orbit records)";
+            orbitEl.appendChild(empty);
+          } else {
+            orbit.forEach((card) => {
+              const chip = document.createElement("span");
+              chip.className = "chip" + (isFixture(card) ? " is-fixture" : "");
+              chip.textContent = cardTitle(card);
+              orbitEl.appendChild(chip);
+            });
+          }
+
+          const focus = foreground[0];
+          if (!focus) {
+            fgTitle.textContent = "(no foreground record)";
+            fgSub.textContent = body?.latestRuntimeReport?.message || "Harness returned empty foreground.";
+            fg.classList.remove("is-active", "is-fixture");
+            return;
+          }
+
+          fgTitle.textContent = cardTitle(focus);
+          fgSub.textContent = cardBody(focus) || "No card_data.body on record.";
+          fg.classList.toggle("is-fixture", isFixture(focus));
+          fg.classList.add("is-active");
+        }
+
+        function highlightStep(label) {
+          const idx = STEP_COPY.findIndex((s) => s.label === label);
+          document.querySelectorAll(".step").forEach((el, j) => {
+            el.classList.remove("is-active", "is-done");
+            if (idx < 0) return;
+            if (j < idx) el.classList.add("is-done");
+            if (j === idx) el.classList.add("is-active");
+          });
+        }
+
+        async function callHook(name) {
           hookLine.textContent = "POST " + HOOK + name + " …";
-          return fetch(HOOK + encodeURIComponent(name), {
+          const res = await fetch(HOOK + encodeURIComponent(name), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -497,56 +492,70 @@
               builderName: "Builder",
               companyName: "Demo Co"
             })
-          }).catch(() => null);
-        }
-
-        function renderOrbit(labels) {
-          orbitEl.innerHTML = "";
-          labels.forEach((label, i) => {
-            const chip = document.createElement("span");
-            chip.className = "chip";
-            chip.textContent = label;
-            orbitEl.appendChild(chip);
-            setTimeout(() => chip.classList.add("is-in"), 80 + i * 100);
           });
-        }
-
-        function setForeground(card) {
-          fgTitle.textContent = card.title;
-          fgSub.textContent = card.sub;
-          fg.classList.remove("is-active");
-          requestAnimationFrame(() => fg.classList.add("is-active"));
+          if (!res.ok) {
+            throw new Error(name + " → HTTP " + res.status);
+          }
+          return res.json();
         }
 
         async function run() {
+          runBtn.disabled = true;
+          statusPill.textContent = "RUNNING";
+          statusPill.className = "status-pill is-running";
           cta.classList.remove("is-visible");
           document.querySelectorAll(".step").forEach((s) => s.classList.remove("is-active", "is-done"));
 
-          for (let i = 0; i < SCRIPT.length; i++) {
-            const step = SCRIPT[i];
-            const el = document.getElementById("step-" + i);
-            document.querySelectorAll(".step").forEach((s, j) => {
-              if (j < i) s.classList.add("is-done");
-              if (j === i) s.classList.add("is-active");
-            });
-            setForeground(step.foreground);
-            renderOrbit(step.orbit);
-            void callHook(step.hook);
-            await sleep(STEP_MS);
-            el.classList.remove("is-active");
-            el.classList.add("is-done");
-          }
+          try {
+            const start = await callHook("start-live-agent-desk");
+            highlightStep(start.label || "agent_online");
+            renderHarnessCards(start);
+            hookLine.textContent =
+              "start OK · label=" + (start.label || "?") + " · message=" + (start.latestRuntimeReport?.message || "—");
 
-          cta.classList.add("is-visible");
-          document.getElementById("live-pill").textContent = "PROOF COMPLETE";
+            let done = false;
+            let ticks = 0;
+            while (!done && ticks < 12) {
+              await new Promise((r) => setTimeout(r, 900));
+              const tick = await callHook("tick-live-agent-desk");
+              highlightStep(tick.label || "");
+              renderHarnessCards(tick);
+              hookLine.textContent =
+                "tick " +
+                (ticks + 1) +
+                " · label=" +
+                (tick.label || "?") +
+                " · scripted=" +
+                String(tick.latestRuntimeReport?.scripted !== false) +
+                " · " +
+                (tick.latestRuntimeReport?.message || "");
+              done = Boolean(tick.done);
+              ticks += 1;
+            }
+
+            if (!done) throw new Error("Script did not finish within tick limit");
+            cta.classList.add("is-visible");
+            statusPill.textContent = "SMOKE TEST OK";
+            statusPill.className = "status-pill is-running";
+            highlightStep("complete");
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            statusPill.textContent = "FAILED";
+            statusPill.className = "status-pill is-error";
+            fgTitle.textContent = "Server required";
+            fgSub.textContent =
+              msg +
+              "\n\nRun from repo root:\n  npm run demo:gateway\nThen open http://localhost:9252/gateway-proof.html";
+            hookLine.textContent = "Error: " + msg;
+          } finally {
+            runBtn.disabled = false;
+          }
         }
 
-        document.getElementById("run-btn").addEventListener("click", run);
+        runBtn.addEventListener("click", run);
         document.getElementById("github-btn").addEventListener("click", () => {
           window.open("https://github.com/Valen-Systems-Inc/core", "_blank");
         });
-
-        run();
       })();
     </script>
   </body>

@@ -43,15 +43,15 @@ loading, bundler, contracts, fixtures, and browser smoke proof.
 
 No hosted account, private token, or cloud access is required.
 
-### Live Agent Desk (Milestone 2 preview)
+### Live Agent Desk (local hook smoke test)
 
-Agents can drive **foreground ↔ orbit** card choreography via local ValenGateway hooks — see [docs/live-agent-desk.md](docs/live-agent-desk.md).
+Scripted localhost harness for ValenGateway-shaped hooks and JSON card upserts — **not** production M2 or human approval. See [docs/live-agent-desk.md](docs/live-agent-desk.md).
 
 ```bash
 npm run demo:gateway
 ```
 
-Then open [http://localhost:9252/gateway-proof.html](http://localhost:9252/gateway-proof.html).
+Then open [http://localhost:9252/gateway-proof.html](http://localhost:9252/gateway-proof.html) and run the smoke test (requires the dev server).
 
 ## Start Contributing
 
