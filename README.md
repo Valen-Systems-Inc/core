@@ -14,7 +14,7 @@ if you want to.
 Interested builders and aspiring Valen Systems developers are welcome to
 experiment, sharpen the interface, and open pull requests.
 
-All issues in repo are directly correlated to actual production issues,
+All issues in this OSS repo are directly correlated to actual production issues,
 so the pathway is clear:
 
 fix issues here in PRs - if they got merged here, they likely got merged 
