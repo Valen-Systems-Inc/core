@@ -1,117 +1,144 @@
-                    POLYFORM NONCOMMERCIAL LICENSE
-# PolyForm Noncommercial License 1.0.0
+Valen Systems Proprietary Source-Available License
 
-https://polyformproject.org/licenses/noncommercial/1.0.0
+Copyright © Valen Systems Inc. All rights reserved.
 
-## Acceptance
+This repository is source-available, not open source.
 
-In order to get any license under these terms, you must agree to them as both
-strict obligations and conditions to all your licenses.
+Valen Systems Inc. is making this code visible so trusted builders, prospective contributors, contractors, collaborators, and developers may inspect, run, study, and improve the Core interface under controlled terms.
 
-## Copyright License
+This license exists to protect the Company’s strategic position while still creating a serious pathway for builders to help advance Core by Valen Systems.
 
-The licensor grants you a copyright license for the software to do everything
-you might do with the software that would otherwise infringe the licensor's
-copyright in it for any permitted purpose. However, you may only distribute the
-software according to [Distribution License](#distribution-license) and make
-changes or new works based on the software according to
-[Changes and New Works License](#changes-and-new-works-license).
+Core is being built to give operators more capability, more control, and less dependence on incumbent dashboard-based software. The Company believes powerful software should become easier to use, not harder; more useful to ordinary operators, not more trapped behind vendors, dashboards, and technical gatekeeping.
 
-## Distribution License
+That mission requires openness to builders, but it also requires discipline around ownership, commercialization, and distribution.
 
-The licensor grants you an additional copyright license to distribute copies of
-the software. Your license to distribute covers distributing the software with
-changes and new works permitted by
-[Changes and New Works License](#changes-and-new-works-license).
+1. Limited License Grant
 
-## Notices
+Valen Systems Inc. (the “Company”) grants you a limited, revocable, non-exclusive, non-transferable, non-sublicensable license to access, view, run, and modify the code in this repository solely for one or more of the following permitted purposes:
 
-You must ensure that anyone who gets a copy of any part of the software from you
-also gets a copy of these terms or the URL for them above, as well as copies of
-any plain-text lines beginning with `Required Notice:` that the licensor
-provided with the software. For example:
+1. evaluating the repository as a prospective contributor, contractor, employee, collaborator, or developer;
+2. performing work officially assigned or expressly authorized by the Company;
+3. testing, improving, documenting, or submitting proposed changes to the Company;
+4. private, noncommercial experimentation that does not compete with the Company, expose the code to third parties, or violate this license.
 
-> Required Notice: Copyright Yoyodyne, Inc. (http://example.com)
+No other rights are granted.
 
-Required Notice: Copyright 2026 Valen Systems Inc.
+This license does not grant any right to commercialize, distribute, host, resell, sublicense, rebrand, productize, or operate the code, any derivative work, or any substantially similar competing system.
 
-## Changes and New Works License
+2. No Open-Source License
 
-The licensor grants you an additional copyright license to make changes and new
-works based on the software for any permitted purpose.
+This repository is not licensed under an open-source license.
 
-## Patent License
+No rights are granted under MIT, Apache, GPL, AGPL, BSD, Creative Commons, or any other open-source or public license.
 
-The licensor grants you a patent license for the software that covers patent
-claims the licensor can license, or becomes able to license, that you would
-infringe by using the software.
+Any permission to access or modify this repository is limited to the rights expressly stated in this license.
 
-## Noncommercial Purposes
+3. Restrictions
 
-Any noncommercial purpose is a permitted purpose.
+You may not, without the Company’s prior written permission:
 
-## Personal Uses
+1. copy, distribute, publish, upload, mirror, sublicense, sell, rent, lease, loan, host, transmit, or otherwise make the code available to any third party;
+2. use the code or any derivative work for a commercial product, service, consulting engagement, internal business tool, SaaS product, agent interface, AI interface, runtime, dashboard, operating system, or competing platform;
+3. remove, alter, obscure, or misrepresent any copyright, license, authorship, attribution, or proprietary notices;
+4. use the code to build, train, fine-tune, benchmark, or improve any AI model, coding model, agent system, dataset, or automated development system, except as expressly authorized by the Company;
+5. scrape, index, ingest, mine, or otherwise extract the repository for use in model training, code generation systems, search products, or competitive analysis;
+6. reverse engineer, decompile, disassemble, or attempt to derive non-public architecture, private workflows, commercial choreography, backend logic, or business methods from the repository;
+7. use the repository to create or assist a competing product or service;
+8. share the code through public or private repositories, messaging platforms, email, cloud storage, forums, social media, websites, AI tools, or any other external system except as expressly authorized by the Company.
 
-Personal use for research, experiment, and testing for the benefit of public
-knowledge, personal study, private entertainment, hobby projects, amateur
-pursuits, or religious observance, without any anticipated commercial
-application, is use for a permitted purpose.
+4. Contributions and Intellectual Property Assignment
 
-## Noncommercial Organizations
+Any modification, improvement, enhancement, derivative work, bug fix, documentation, design, code, architecture, test, proof, workflow, configuration, idea expressed in code, or other contribution made by you relating to this repository or submitted to the Company is a “Contribution.”
 
-Use by any charitable organization, educational institution, public research
-organization, public safety or health organization, environmental protection
-organization, or government institution is use for a permitted purpose
-regardless of the source of funding or obligations resulting from the funding.
+To the maximum extent permitted by law, all Contributions are automatically and exclusively assigned to Valen Systems Inc. upon creation or submission.
 
-## Fair Use
+You hereby irrevocably assign, transfer, and convey to the Company all right, title, and interest in and to all Contributions, including all copyrights, patent rights, trade secret rights, moral rights to the extent waivable, database rights, mask work rights, and all other intellectual property or proprietary rights.
 
-You may have "fair use" rights for the software under the law. These terms do not
-limit them.
+You agree that:
 
-## No Other Rights
+1. the Company may use, modify, commercialize, license, sublicense, sell, distribute, publish, keep private, or otherwise exploit Contributions without restriction;
+2. you retain no ownership interest, license claim, royalty claim, attribution right, approval right, or compensation claim in any Contribution unless separately agreed in writing by the Company;
+3. you will execute any documents reasonably requested by the Company to confirm, perfect, record, or enforce the Company’s ownership of Contributions;
+4. if any Contribution cannot be assigned by law, you grant the Company an irrevocable, worldwide, perpetual, exclusive, royalty-free, fully paid, transferable, sublicensable license to use, reproduce, modify, distribute, commercialize, enforce, and otherwise exploit that Contribution for any purpose.
 
-These terms do not allow you to sublicense or transfer any of your licenses to
-anyone else, or prevent the licensor from granting licenses to anyone else.
-These terms do not imply any other licenses.
+5. Patent Rights
 
-## Patent Defense
+If any Contribution includes or gives rise to any patentable invention, discovery, method, process, system, interface, runtime behavior, agent workflow, spatial interaction model, backend integration, or other patentable subject matter, you assign all related patent rights to the Company.
 
-If you make any written claim that the software infringes or contributes to
-infringement of any patent, your patent license for the software granted under
-these terms ends immediately. If your company makes such a claim, your patent
-license ends immediately for work on behalf of your company.
+You may not assert any patent, patent application, invention right, or similar claim against the Company, its customers, users, partners, contractors, contributors, licensees, successors, or assigns based on the Company’s use of the repository, the Core product, or any Contribution.
 
-## Violations
+6. Confidentiality and Public Boundary
 
-The first time you are notified in writing that you have violated any of these
-terms, or done anything with the software not covered by your licenses, your
-licenses can nonetheless continue if you come into full compliance with these
-terms, and take practical steps to correct past violations, within 32 days of
-receiving notice. Otherwise, all your licenses end immediately.
+This repository may expose only a public or sanitized portion of the Company’s technology.
 
-## No Liability
+You acknowledge that non-public information relating to Valen Systems Inc., Core, ValenGateway, runtime architecture, customer workflows, business logic, commercial strategy, backend systems, agent orchestration, private repositories, private documentation, or production infrastructure may be confidential or proprietary.
 
-As far as the law allows, the software comes as is, without any warranty or
-condition, and the licensor will not be liable to you for any damages arising
-out of these terms or the use or nature of the software, under any kind of legal
-claim.
+You may not disclose confidential or non-public Company information without written permission.
 
-## Definitions
+Nothing in this repository grants access to or rights in:
 
-The licensor is the individual or entity offering these terms, and the software
-is the software the licensor makes available under these terms.
+1. hosted backend systems;
+2. production credentials, tokens, keys, or secrets;
+3. private repositories;
+4. customer data;
+5. commercial deployment logic;
+6. payment flows;
+7. proprietary business workflows;
+8. unreleased product strategy;
+9. Company trade secrets.
 
-You refers to the individual or entity agreeing to these terms.
+7. Reservation of Rights
 
-Your company is any legal entity, sole proprietorship, or other kind of
-organization that you work for, plus all organizations that have control over,
-are under the control of, or are under common control with that organization.
-Control means ownership of substantially all the assets of an entity, or the
-power to direct its management and policies by vote, contract, or otherwise.
-Control can be direct or indirect.
+All rights not expressly granted are reserved by Valen Systems Inc.
 
-Your licenses are all the licenses granted to you for the software under these
-terms.
+The Company retains all right, title, and interest in and to Core, the repository, the code, the runtime, the interface, the architecture, the trademarks, the product design, the business logic, the commercial system, and all related intellectual property.
 
-Use means anything you do with the software requiring one of your licenses.
+No license is granted to use the names Valen Systems, Core, Core by Valen Systems, Valen, ValenGateway, or any Company trademarks, service marks, logos, product names, trade dress, or brand assets except as expressly authorized in writing.
+
+8. Termination
+
+This license terminates automatically upon any breach.
+
+The Company may also terminate this license at any time, for any reason, at its sole discretion.
+
+Upon termination, you must immediately stop using the code and destroy or return all copies, modifications, derivatives, notes, and materials containing the code or confidential Company information.
+
+Termination does not affect the Company’s ownership of Contributions, assignment rights, confidentiality rights, restriction rights, or any remedies available under law.
+
+9. No Warranty
+
+The code is provided “AS IS” and “AS AVAILABLE” without warranties of any kind, express or implied.
+
+The Company disclaims all warranties, including warranties of merchantability, fitness for a particular purpose, title, non-infringement, availability, security, accuracy, reliability, and uninterrupted operation.
+
+You use the code at your own risk.
+
+10. Limitation of Liability
+
+To the maximum extent permitted by law, the Company shall not be liable for any indirect, incidental, special, consequential, exemplary, punitive, or lost-profit damages arising from or relating to this repository, this license, the code, Contributions, or any use of the code.
+
+The Company’s total liability for any claim relating to this license shall not exceed $100.
+
+11. Equitable Relief
+
+You acknowledge that unauthorized use, disclosure, copying, distribution, commercialization, or misuse of the code may cause irreparable harm to the Company.
+
+The Company may seek injunctive relief, specific performance, and any other equitable remedies without needing to prove monetary damages or post a bond.
+
+12. Governing Law and Venue
+
+This license is governed by the laws of the State of California, without regard to conflict-of-law principles.
+
+Any dispute arising from or relating to this license, the repository, the code, or Contributions shall be brought exclusively in the state or federal courts located in Los Angeles County, California, unless the Company elects another venue to seek injunctive or equitable relief.
+
+13. Entire Agreement
+
+This license is the entire agreement between you and the Company regarding access to and use of this repository, unless you have a separate written agreement signed by the Company.
+
+If a separate written agreement exists, that agreement controls to the extent it conflicts with this license.
+
+14. Acceptance
+
+By accessing, viewing, cloning, downloading, running, modifying, contributing to, or using this repository, you acknowledge that you have read, understood, and agree to be bound by this license.
+
+If you do not agree, do not access, use, modify, or contribute to this repository.
