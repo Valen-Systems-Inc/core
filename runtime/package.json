@@ -9,6 +9,7 @@
     "check": "npm run build && npm run check:dist && npm run check:contracts && npm run proof:card-helpers && npm run proof:card-loop",
     "check:contracts": "node scripts/check-contracts.mjs",
     "check:dist": "node scripts/check-dist-sync.mjs",
+    "setup:browser": "playwright install chromium",
     "proof:browser": "npm run build && playwright test",
     "proof:bundle": "node scripts/proof-runtime-bundle.mjs",
     "proof:card-helpers": "node scripts/proof-card-helpers.mjs",

@@ -7,11 +7,15 @@ Core is a local workshop for improving a spatial interface for AI agents.
 ```bash
 npm install --prefix runtime
 npm run check
+npm run setup:browser
 npm run proof:browser
 npm run dev
 ```
 
 For a guided first change, read [docs/getting-started.md](docs/getting-started.md).
+
+`npm run setup:browser` downloads the Chromium binary Playwright needs for
+local browser proof. Run it once per machine before `npm run proof:browser`.
 
 ## Good First Contributions
 
