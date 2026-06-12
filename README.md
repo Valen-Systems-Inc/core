@@ -43,6 +43,16 @@ loading, bundler, contracts, fixtures, and browser smoke proof.
 
 No hosted account, private token, or cloud access is required.
 
+### Live Agent Desk (local hook smoke test)
+
+Scripted localhost harness for ValenGateway-shaped hooks and JSON card upserts — **not** production M2 or human approval. See [docs/live-agent-desk.md](docs/live-agent-desk.md).
+
+```bash
+npm run demo:gateway
+```
+
+Then open [http://localhost:9252/gateway-proof.html](http://localhost:9252/gateway-proof.html) and run the smoke test (requires the dev server).
+
 ## Start Contributing
 
 Start with [docs/getting-started.md](docs/getting-started.md). Then use

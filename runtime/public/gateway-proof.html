@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ValenGateway — local hook smoke test</title>
+    <style>
+      :root {
+        --bg: #07080c;
+        --panel: #11131a;
+        --ink: #f4f0e6;
+        --muted: #9a9588;
+        --accent: #5ee9c7;
+        --accent-dim: rgba(94, 233, 199, 0.2);
+        --warn: #e8c66a;
+        --warn-bg: rgba(232, 198, 106, 0.1);
+        --err: #f08080;
+        --ok: #5ee9c7;
+        --line: rgba(255, 255, 255, 0.08);
+        --font: "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font);
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 28px 20px 48px;
+      }
+      .disclaimer {
+        margin-bottom: 22px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(232, 198, 106, 0.45);
+        background: var(--warn-bg);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        color: var(--ink);
+      }
+      .disclaimer strong {
+        color: var(--warn);
+      }
+      .disclaimer ul {
+        margin: 10px 0 0;
+        padding-left: 1.2rem;
+        color: var(--muted);
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .brand {
+        font-size: 0.75rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      h1 {
+        margin: 6px 0 0;
+        font-size: clamp(1.35rem, 4vw, 1.85rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .status-pill.is-running {
+        border-color: var(--accent-dim);
+        color: var(--accent);
+      }
+      .status-pill.is-error {
+        border-color: rgba(240, 128, 128, 0.4);
+        color: var(--err);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 800px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 20px;
+        min-height: 420px;
+      }
+      .panel h2 {
+        margin: 0 0 16px;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .steps {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+        opacity: 0.35;
+      }
+      .step.is-active {
+        opacity: 1;
+      }
+      .step.is-done {
+        opacity: 0.8;
+      }
+      .step-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      .step.is-active .step-icon {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .step.is-done .step-icon {
+        border-color: var(--ok);
+        background: rgba(94, 233, 199, 0.15);
+        color: var(--ok);
+      }
+      .step.is-done .step-icon::after {
+        content: "✓";
+      }
+      .step-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .step-body {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .step-note {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.78rem;
+        color: var(--warn);
+      }
+      .workspace {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        height: 100%;
+      }
+      .panel-badge {
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--warn);
+        margin: -8px 0 12px;
+      }
+      .orbit-lane {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-height: 44px;
+      }
+      .orbit-lane-label {
+        width: 100%;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        font-size: 0.78rem;
+      }
+      .chip.is-fixture {
+        border-color: rgba(232, 198, 106, 0.35);
+        color: var(--warn);
+      }
+      .foreground-card {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        border-radius: 14px;
+        border: 2px solid var(--line);
+        background: rgba(94, 233, 199, 0.04);
+        text-align: center;
+        padding: 24px;
+      }
+      .foreground-card.is-active {
+        border-color: var(--accent);
+        box-shadow: 0 0 32px rgba(94, 233, 199, 0.15);
+      }
+      .foreground-card.is-fixture {
+        border-color: rgba(232, 198, 106, 0.45);
+        background: var(--warn-bg);
+      }
+      .foreground-card .title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .foreground-card .sub {
+        font-size: 0.86rem;
+        color: var(--muted);
+        white-space: pre-line;
+        line-height: 1.45;
+      }
+      .hook-line {
+        margin-top: auto;
+        padding-top: 12px;
+        font-family: ui-monospace, monospace;
+        font-size: 0.72rem;
+        color: var(--warn);
+        word-break: break-all;
+      }
+      .cta {
+        margin-top: 24px;
+        padding: 18px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.02);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+      .cta.is-visible {
+        border-color: var(--accent-dim);
+        color: var(--ink);
+      }
+      .actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+        border-radius: 10px;
+        padding: 12px 20px;
+        border: 1px solid var(--accent-dim);
+        background: rgba(94, 233, 199, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      button.secondary {
+        background: transparent;
+        color: var(--muted);
+        border-color: var(--line);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="disclaimer">
+        <strong>Honest scope.</strong> This page is a <em>localhost hook smoke test</em>, not production Milestone 2.
+        <ul>
+          <li>Every step is <strong>scripted</strong> — <code>tick-live-agent-desk</code> auto-advances; nothing waits for you.</li>
+          <li>Panels below show <strong>JSON work-object records</strong> returned by the harness — not the 3D GLB cards in main Core.</li>
+          <li><strong>No human approval</strong> — the approval step is a fixture showing card shape only.</li>
+          <li>Requires <code>npm run demo:gateway</code> — opening this file directly will fail.</li>
+        </ul>
+      </div>
+
+      <header>
+        <div>
+          <div class="brand">Valen Systems · contributor smoke test</div>
+          <h1>Local ValenGateway hook loop</h1>
+          <p style="margin: 8px 0 0; color: var(--muted); font-size: 0.95rem; max-width: 56ch">
+            Exercises <code style="color: var(--accent)">/api/hooks/execute/local-core/…</code> and displays
+            foreground/orbit records from the response — same buckets real Core uses, local JSON only.
+          </p>
+        </div>
+        <div class="status-pill" id="status-pill">IDLE</div>
+      </header>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>Script steps (from harness label)</h2>
+          <ol class="steps" id="steps"></ol>
+        </section>
+
+        <section class="panel">
+          <h2>Harness card records (not 3D UI)</h2>
+          <p class="panel-badge">Data from hook JSON · illustrative layout</p>
+          <div class="workspace">
+            <div class="orbit-lane">
+              <span class="orbit-lane-label">Orbit — kept records</span>
+              <div id="orbit-chips"></div>
+            </div>
+            <div class="foreground-card" id="foreground-card">
+              <div>
+                <div class="title" id="fg-title">—</div>
+                <div class="sub" id="fg-sub">Start the dev server, then Run smoke test.</div>
+              </div>
+            </div>
+            <div class="hook-line" id="hook-line">Waiting for server…</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="cta" id="cta">
+        This PR proposes hook names + a local harness pattern. Production M2 still needs hosted gateway, runtime
+        wiring, and real human-in-the-loop on approval cards.
+      </div>
+
+      <div class="actions">
+        <button type="button" id="run-btn">Run smoke test</button>
+        <button type="button" class="secondary" id="github-btn">View upstream repo</button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const HOOK = "/api/hooks/execute/local-core/";
+
+        const STEP_COPY = [
+          {
+            label: "agent_online",
+            title: "Desk session starts",
+            body: "POST start-live-agent-desk; harness creates session + first upsert.",
+            note: "Scripted — not a human opening Core."
+          },
+          {
+            label: "scanning_workspace",
+            title: "Foreground ↔ orbit upsert",
+            body: "Prior record moves to orbit; new record focused — proves bucket shape.",
+            note: "JSON store only; WebGL panels unchanged."
+          },
+          {
+            label: "running_capability",
+            title: "Capability step (local list)",
+            body: "Script mentions manage_valen_hooks; lists hook names from harness.",
+            note: "No external API."
+          },
+          {
+            label: "approval_fixture",
+            title: "Approval card fixture",
+            body: "Shows approval card_type + actions in JSON. Next tick auto-advances.",
+            note: "Not human-in-the-loop — fixture only."
+          },
+          {
+            label: "complete",
+            title: "Script done",
+            body: "done=true; summary record on foreground. Smoke test finished.",
+            note: "Check npm run proof:agent-desk for CI-style run."
+          }
+        ];
+
+        let sessionId =
+          localStorage.getItem("valen_gateway_proof_session") ||
+          String(100000 + ((Math.random() * 899999) | 0));
+        localStorage.setItem("valen_gateway_proof_session", sessionId);
+
+        const stepsEl = document.getElementById("steps");
+        const orbitEl = document.getElementById("orbit-chips");
+        const fg = document.getElementById("foreground-card");
+        const fgTitle = document.getElementById("fg-title");
+        const fgSub = document.getElementById("fg-sub");
+        const hookLine = document.getElementById("hook-line");
+        const cta = document.getElementById("cta");
+        const statusPill = document.getElementById("status-pill");
+        const runBtn = document.getElementById("run-btn");
+
+        STEP_COPY.forEach((s, i) => {
+          const li = document.createElement("li");
+          li.className = "step";
+          li.id = "step-" + i;
+          li.dataset.label = s.label;
+          li.innerHTML =
+            '<div class="step-icon">' +
+            (i + 1) +
+            '</div><div><div class="step-title">' +
+            s.title +
+            '</div><div class="step-body">' +
+            s.body +
+            '<span class="step-note">' +
+            s.note +
+            "</span></div></div>";
+          stepsEl.appendChild(li);
+        });
+
+        function cardTitle(card) {
+          if (!card) return "—";
+          const data = card.card_data || {};
+          return String(card.title || data.title || card.id || "—");
+        }
+
+        function cardBody(card) {
+          if (!card) return "";
+          const data = card.card_data || {};
+          return String(data.body || card.body || "").trim();
+        }
+
+        function isFixture(card) {
+          const data = card?.card_data || {};
+          return Boolean(data.fixture) || String(card?.id || "").includes("fixture");
+        }
+
+        function renderHarnessCards(body) {
+          const foreground = Array.isArray(body?.foreground) ? body.foreground : [];
+          const orbit = Array.isArray(body?.orbit) ? body.orbit : [];
+
+          orbitEl.innerHTML = "";
+          if (!orbit.length) {
+            const empty = document.createElement("span");
+            empty.className = "chip";
+            empty.textContent = "(no orbit records)";
+            orbitEl.appendChild(empty);
+          } else {
+            orbit.forEach((card) => {
+              const chip = document.createElement("span");
+              chip.className = "chip" + (isFixture(card) ? " is-fixture" : "");
+              chip.textContent = cardTitle(card);
+              orbitEl.appendChild(chip);
+            });
+          }
+
+          const focus = foreground[0];
+          if (!focus) {
+            fgTitle.textContent = "(no foreground record)";
+            fgSub.textContent = body?.latestRuntimeReport?.message || "Harness returned empty foreground.";
+            fg.classList.remove("is-active", "is-fixture");
+            return;
+          }
+
+          fgTitle.textContent = cardTitle(focus);
+          fgSub.textContent = cardBody(focus) || "No card_data.body on record.";
+          fg.classList.toggle("is-fixture", isFixture(focus));
+          fg.classList.add("is-active");
+        }
+
+        function highlightStep(label) {
+          const idx = STEP_COPY.findIndex((s) => s.label === label);
+          document.querySelectorAll(".step").forEach((el, j) => {
+            el.classList.remove("is-active", "is-done");
+            if (idx < 0) return;
+            if (j < idx) el.classList.add("is-done");
+            if (j === idx) el.classList.add("is-active");
+          });
+        }
+
+        async function callHook(name) {
+          hookLine.textContent = "POST " + HOOK + name + " …";
+          const res = await fetch(HOOK + encodeURIComponent(name), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sessionId,
+              operatorName: "Operator",
+              builderName: "Builder",
+              companyName: "Demo Co"
+            })
+          });
+          if (!res.ok) {
+            throw new Error(name + " → HTTP " + res.status);
+          }
+          return res.json();
+        }
+
+        async function run() {
+          runBtn.disabled = true;
+          statusPill.textContent = "RUNNING";
+          statusPill.className = "status-pill is-running";
+          cta.classList.remove("is-visible");
+          document.querySelectorAll(".step").forEach((s) => s.classList.remove("is-active", "is-done"));
+
+          try {
+            const start = await callHook("start-live-agent-desk");
+            highlightStep(start.label || "agent_online");
+            renderHarnessCards(start);
+            hookLine.textContent =
+              "start OK · label=" + (start.label || "?") + " · message=" + (start.latestRuntimeReport?.message || "—");
+
+            let done = false;
+            let ticks = 0;
+            while (!done && ticks < 12) {
+              await new Promise((r) => setTimeout(r, 900));
+              const tick = await callHook("tick-live-agent-desk");
+              highlightStep(tick.label || "");
+              renderHarnessCards(tick);
+              hookLine.textContent =
+                "tick " +
+                (ticks + 1) +
+                " · label=" +
+                (tick.label || "?") +
+                " · scripted=" +
+                String(tick.latestRuntimeReport?.scripted !== false) +
+                " · " +
+                (tick.latestRuntimeReport?.message || "");
+              done = Boolean(tick.done);
+              ticks += 1;
+            }
+
+            if (!done) throw new Error("Script did not finish within tick limit");
+            cta.classList.add("is-visible");
+            statusPill.textContent = "SMOKE TEST OK";
+            statusPill.className = "status-pill is-running";
+            highlightStep("complete");
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            statusPill.textContent = "FAILED";
+            statusPill.className = "status-pill is-error";
+            fgTitle.textContent = "Server required";
+            fgSub.textContent =
+              msg +
+              "\n\nRun from repo root:\n  npm run demo:gateway\nThen open http://localhost:9252/gateway-proof.html";
+            hookLine.textContent = "Error: " + msg;
+          } finally {
+            runBtn.disabled = false;
+          }
+        }
+
+        runBtn.addEventListener("click", run);
+        document.getElementById("github-btn").addEventListener("click", () => {
+          window.open("https://github.com/Valen-Systems-Inc/core", "_blank");
+        });
+      })();
+    </script>
+  </body>
+</html>

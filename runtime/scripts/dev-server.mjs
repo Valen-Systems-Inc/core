@@ -1,6 +1,7 @@
 import { createReadStream } from "node:fs";
 import { access, stat } from "node:fs/promises";
 import http from "node:http";
+import { execSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createLocalValenCardHarness } from "./local-valen-card-harness.mjs";
@@ -10,6 +11,7 @@ const rootDir = path.resolve(__dirname, "..");
 const publicDir = path.resolve(rootDir, "public");
 const host = process.env.HOST || "0.0.0.0";
 const port = Number(process.env.PORT || "9252");
+const gatewayDemoMode = process.env.VALEN_GATEWAY_DEMO === "1";
 const localValenHarness = createLocalValenCardHarness();
 
 const MIME_TYPES = {
@@ -110,6 +112,23 @@ const server = http.createServer(async (req, res) => {
     sendJson(res, 400, { error: "missing_url" });
     return;
   }
+  const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+  if (url.pathname === "/gateway-proof.html" || url.searchParams.get("demo") === "gateway") {
+    const proofPath = path.resolve(publicDir, "gateway-proof.html");
+    try {
+      await access(proofPath);
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" });
+      createReadStream(proofPath).pipe(res);
+      return;
+    } catch {
+      /* fall through */
+    }
+  }
+  if (gatewayDemoMode && (url.pathname === "/" || url.pathname === "/index.html")) {
+    res.writeHead(302, { Location: "/gateway-proof.html" });
+    res.end();
+    return;
+  }
   if (req.url.startsWith("/api/hooks/execute/")) {
     try {
       await handleLocalValenHook(req, res);
@@ -123,7 +142,32 @@ const server = http.createServer(async (req, res) => {
   await serveStatic(req, res);
 });
 
+function freeListenPortIfBusy() {
+  try {
+    const pid = execSync(`lsof -t -iTCP:${port} -sTCP:LISTEN`, { encoding: "utf8" }).trim().split("\n")[0];
+    if (pid) {
+      console.warn(`Port ${port} was in use (pid ${pid}) — stopping previous server.`);
+      execSync(`kill ${pid}`);
+    }
+  } catch {
+    /* port free */
+  }
+}
+
+freeListenPortIfBusy();
+
+server.on("error", (error) => {
+  if (error && error.code === "EADDRINUSE") {
+    console.error(`\nPort ${port} is already in use. Stop it with:\n  kill $(lsof -t -iTCP:${port} -sTCP:LISTEN)\n`);
+    process.exit(1);
+  }
+  throw error;
+});
+
 server.listen(port, host, () => {
-  console.log(`Core public playground listening on http://${host}:${port}`);
+  console.log(`Core public playground listening on http://localhost:${port}`);
+  if (gatewayDemoMode) {
+    console.log("Gateway proof: http://localhost:" + port + "/gateway-proof.html");
+  }
   console.log(`Serving local Valen card hooks from ${localValenHarness.storePath}`);
 });

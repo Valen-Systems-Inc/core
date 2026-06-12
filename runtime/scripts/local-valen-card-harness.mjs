@@ -1,6 +1,11 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import {
+  advanceAgentDeskState,
+  emptyAgentDeskState,
+  liveAgentDeskStep
+} from "./live-agent-desk-script.mjs";
 
 const DEFAULT_STORE_PATH = path.join(os.tmpdir(), "core-public-local-card-store.json");
 
@@ -47,6 +52,16 @@ export function createLocalValenCardHarness(options = {}) {
       store = emptyStore();
       await persist();
       return response(200, { ok: true, success: true });
+    }
+
+    if (hookName === "stop-live-agent-desk") {
+      const sessionId = getSessionId({ query, body });
+      if (store.agentDesks[sessionId]) {
+        store.agentDesks[sessionId].running = false;
+        store.agentDesks[sessionId].completedAt = new Date().toISOString();
+      }
+      await persist();
+      return response(200, { ok: true, success: true, sessionId, source: "stop-live-agent-desk" });
     }
 
     if (hookName === "upsert-card") {
@@ -130,6 +145,109 @@ export function createLocalValenCardHarness(options = {}) {
       });
       await persist();
       return response(200, { ok: true, success: true, sessionId, card: card.value, source: "queue-capability-work-object" });
+    }
+
+    if (hookName === "start-live-agent-desk") {
+      const sessionId = getSessionId({ query, body });
+      store.agentDesks[sessionId] = {
+        ...emptyAgentDeskState(),
+        running: true,
+        stepIndex: 0,
+        startedAt: new Date().toISOString(),
+        label: "starting",
+        profile: {
+          operatorName: body.operatorName || "Operator",
+          builderName: body.builderName || "Builder",
+          companyName: body.companyName || "Demo Co"
+        }
+      };
+      store.cards = store.cards.filter((card) => {
+        const cluster = parseJsonish(card.spatial_state).cluster;
+        return !(String(card.sessionId) === String(sessionId) && cluster === "agent-desk");
+      });
+      await persist();
+      const tick = await handleHookRequest({
+        hook: "tick-live-agent-desk",
+        method: "POST",
+        body: { sessionId }
+      });
+      return response(200, {
+        ok: true,
+        success: true,
+        sessionId,
+        source: "start-live-agent-desk",
+        desk: store.agentDesks[sessionId],
+        ...(tick?.body || {})
+      });
+    }
+
+    if (hookName === "tick-live-agent-desk") {
+      const sessionId = getSessionId({ query, body });
+      const desk = store.agentDesks[sessionId] || { ...emptyAgentDeskState(), running: true, profile: {} };
+      if (!desk.running) {
+        return response(400, { ok: false, success: false, error: "agent_desk_not_running", sessionId });
+      }
+      const frame = liveAgentDeskStep(desk, desk.profile || {});
+      if (!frame.done && frame.cards?.length) {
+        bulkUpsertCards(sessionId, frame.cards, "live-agent-desk");
+      }
+      const latestRuntimeReport = {
+        ...frame.report,
+        sessionId,
+        reportedAt: new Date().toISOString(),
+        agentDesk: true
+      };
+      store.runtimeStatus[sessionId] = latestRuntimeReport;
+      desk.label = frame.label;
+      desk.agentPhase = frame.report?.agentPhase || desk.agentPhase;
+      desk.sculpturePulse = frame.report?.sculpturePulse ?? desk.sculpturePulse;
+      if (frame.done) {
+        desk.running = false;
+        desk.completedAt = new Date().toISOString();
+      } else {
+        Object.assign(desk, advanceAgentDeskState(desk));
+      }
+      store.agentDesks[sessionId] = desk;
+      const cards = getCards(sessionId);
+      void persist();
+      return response(200, {
+        ok: true,
+        success: true,
+        sessionId,
+        source: "tick-live-agent-desk",
+        done: frame.done,
+        label: frame.label,
+        desk,
+        latestRuntimeReport,
+        ...cards
+      });
+    }
+
+    if (hookName === "get-live-agent-desk-status") {
+      const sessionId = getSessionId({ query, body });
+      const desk = store.agentDesks[sessionId] || emptyAgentDeskState();
+      return response(200, { ok: true, success: true, sessionId, desk, runtime: getRuntimeStatus(sessionId) });
+    }
+
+    if (hookName === "manage-valen-hooks") {
+      const sessionId = getSessionId({ query, body });
+      return response(200, {
+        ok: true,
+        success: true,
+        sessionId,
+        hooks: [
+          "get-cards",
+          "start-live-agent-desk",
+          "tick-live-agent-desk",
+          "get-live-agent-desk-status",
+          "manage-valen-hooks",
+          "queue-capability-work-object",
+          "process-card-action",
+          "report-runtime-status"
+        ],
+        gateway: "public-local-m2-preview",
+        source: "manage-valen-hooks"
+      });
     }
 
     return response(404, { ok: false, success: false, error: "local_harness_hook_not_implemented", hook: hookName });
@@ -267,13 +385,14 @@ export function createLocalValenCardHarness(options = {}) {
 }
 
 function emptyStore() {
-  return { cards: [], runtimeStatus: {} };
+  return { cards: [], runtimeStatus: {}, agentDesks: {} };
 }
 
 function normalizeStore(value) {
   return {
     cards: Array.isArray(value?.cards) ? value.cards.map(normalizeCard) : [],
-    runtimeStatus: value?.runtimeStatus && typeof value.runtimeStatus === "object" ? value.runtimeStatus : {}
+    runtimeStatus: value?.runtimeStatus && typeof value.runtimeStatus === "object" ? value.runtimeStatus : {},
+    agentDesks: value?.agentDesks && typeof value.agentDesks === "object" ? value.agentDesks : {}
   };
 }
 

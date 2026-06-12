@@ -13,6 +13,7 @@
     "proof:bundle": "node scripts/proof-runtime-bundle.mjs",
     "proof:card-helpers": "node scripts/proof-card-helpers.mjs",
     "proof:card-loop": "node scripts/proof-card-loop.mjs",
+    "proof:agent-desk": "node scripts/proof-agent-desk.mjs",
     "serve": "node scripts/dev-server.mjs"
   },
   "devDependencies": {
